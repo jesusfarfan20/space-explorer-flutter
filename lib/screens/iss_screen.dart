@@ -58,7 +58,21 @@ class _IssScreenState extends State<IssScreen> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Text(_errorMessage!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.satellite_alt, color: Colors.white24, size: 40),
+              const SizedBox(height: 12),
+              Text(_errorMessage!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+              const SizedBox(height: 16),
+              OutlinedButton.icon(
+                onPressed: _loadIssPosition,
+                icon: const Icon(Icons.refresh, size: 18),
+                label: const Text('Reintentar'),
+                style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFE0A93E), side: const BorderSide(color: Color(0xFFE0A93E))),
+              ),
+            ],
+          ),
         ),
       );
     }

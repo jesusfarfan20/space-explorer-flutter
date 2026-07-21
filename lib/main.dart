@@ -4,6 +4,7 @@ import 'screens/iss_screen.dart';
 import 'screens/astronauts_screen.dart';
 import 'screens/launches_screen.dart';
 import 'screens/asteroids_screen.dart';
+import 'widgets/starfield_background.dart';
 
 void main() {
   runApp(const MyApp());
@@ -100,7 +101,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: _screens[_selectedIndex],
+      body: StarfieldBackground(child: _screens[_selectedIndex]),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) => setState(() => _selectedIndex = index),

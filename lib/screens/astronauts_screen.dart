@@ -53,9 +53,15 @@ class _AstronautsScreenState extends State<AstronautsScreen> {
             const SizedBox(height: 16),
             ...astronauts.map((a) => Container(
                   margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(color: const Color(0xFF12172B), borderRadius: BorderRadius.circular(12)),
-                  child: Column(
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () {},
+                    splashColor: const Color(0xFFE0A93E).withValues(alpha: 0.1),
+                    highlightColor: const Color(0xFFE0A93E).withValues(alpha: 0.05),
+                    child: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
@@ -85,6 +91,8 @@ class _AstronautsScreenState extends State<AstronautsScreen> {
                         Text(a.bio!, style: const TextStyle(color: Colors.white70, height: 1.4, fontSize: 13)),
                       ],
                     ],
+                      ),
+                    ),
                   ),
                 )),
           ],
