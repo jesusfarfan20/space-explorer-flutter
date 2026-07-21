@@ -14,7 +14,15 @@ class _AstronautsScreenState extends State<AstronautsScreen> {
   @override
   void initState() {
     super.initState();
-    _astronautsFuture = SpaceService().fetchAstronauts();
+    _astronautsFuture = _loadAstronauts();
+  }
+
+  Future<List<Astronaut>> _loadAstronauts() async {
+    final astronauts = await SpaceService().fetchAstronauts();
+    for (final astronaut in astronauts) {
+      await SpaceService().enrichAstronautWithWikipedia(astronaut);
+    }
+    return astronauts;
   }
 
   @override
@@ -44,22 +52,38 @@ class _AstronautsScreenState extends State<AstronautsScreen> {
             Text('${astronauts.length} personas en el espacio ahora', style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             ...astronauts.map((a) => Container(
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(color: const Color(0xFF12172B), borderRadius: BorderRadius.circular(12)),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CircleAvatar(backgroundColor: Color(0xFF3E4A7A), child: Icon(Icons.person, color: Colors.white)),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(a.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                            Text(a.craft, style: const TextStyle(color: Color(0xFF8B93A6), fontSize: 13)),
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: const Color(0xFF3E4A7A),
+                            backgroundImage: a.photoUrl != null ? NetworkImage(a.photoUrl!) : null,
+                            child: a.photoUrl == null ? const Icon(Icons.person, color: Colors.white) : null,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(a.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                                Text('Nave: ${a.craft}', style: const TextStyle(color: Color(0xFF8B93A6), fontSize: 13)),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
+                      if (a.bio != null && a.bio!.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        const Divider(color: Color(0xFF2A3050), height: 1),
+                        const SizedBox(height: 10),
+                        Text(a.bio!, style: const TextStyle(color: Colors.white70, height: 1.4, fontSize: 13)),
+                      ],
                     ],
                   ),
                 )),
